@@ -1,0 +1,29 @@
+version: "3.9"
+
+services:
+  fastapi_app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=postgresql://your_user:your_password@postgres-db/url_shortener
+      - REDIS_URL=redis://redis-server:6379
+    depends_on:
+      - postgres-db
+      - redis-server
+
+  postgres-db:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: your_user
+      POSTGRES_PASSWORD: your_password
+      POSTGRES_DB: url_shortener
+    ports:
+      - "5432:5432"
+
+  redis-server:
+    image: redis:latest
+    ports:
+      - "6379:6379"
